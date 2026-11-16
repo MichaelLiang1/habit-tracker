@@ -2,6 +2,7 @@ require "test_helper"
 
 class HabitsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in_as users(:one)
     @habit = habits(:one)
   end
 
@@ -17,7 +18,7 @@ class HabitsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create habit" do
     assert_difference("Habit.count") do
-      post habits_url, params: { habit: { name: @habit.name, user_id: @habit.user_id } }
+      post habits_url, params: { habit: { name: @habit.name } }
     end
 
     assert_redirected_to habit_url(Habit.last)
@@ -34,7 +35,7 @@ class HabitsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update habit" do
-    patch habit_url(@habit), params: { habit: { name: @habit.name, user_id: @habit.user_id } }
+    patch habit_url(@habit), params: { habit: { name: @habit.name } }
     assert_redirected_to habit_url(@habit)
   end
 
@@ -44,5 +45,11 @@ class HabitsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to habits_url
+  end
+
+  test "should not show another user's habit" do
+    sign_in_as users(:two)
+    get habit_url(@habit)
+    assert_response :not_found
   end
 end
