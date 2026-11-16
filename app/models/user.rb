@@ -4,4 +4,7 @@ class User < ApplicationRecord
   has_many :habits, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+  def today
+    Time.find_zone!(time_zone).today
+  end
 end
