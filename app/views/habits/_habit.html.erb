@@ -3,10 +3,11 @@
     <strong>Name:</strong>
     <%= habit.name %>
   </div>
-<% todays_completion = habit.completions.find_by(completed_on: Current.user.today) %>
-<% if todays_completion %>
-  <%= button_to "Undo", habit_completion_path(habit, todays_completion), method: :delete %>
-<% else %>
-  <%= button_to "Mark done today", habit_completions_path(habit) %>
-<% end %>
+  <p>Current streak: <%= habit.current_streak %> | Longest: <%= habit.longest_streak %></p>
+  <% todays_completion = habit.completions.find_by(completed_on: Current.user.today) %>
+  <% if todays_completion %>
+    <%= button_to "Undo", habit_completion_path(habit, todays_completion), method: :delete %>
+  <% else %>
+    <%= button_to "Mark as done", habit_completions_path(habit) %>
+  <% end %>
 </div>
